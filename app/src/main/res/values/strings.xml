@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">My Whatsapp</string>
+
+    <string name="my_app">Möhtəşəm proqram</string>
+    <string name="log_in">Log In</string>
+    <string name="register">Register</string>
+    <string name="account">Account</string>
+
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="age">Age</string>
+    <string name="class_name">Class name</string>
+
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_username">Enter username</string>
+    <string name="enter_old_password">Enter old password</string>
+    <string name="enter_name_surname_classname_or_id">Enter name, surname, classname or ID</string>
+
+    <string name="enter">Enter</string>
+    <string name="create">Create</string>
+    <string name="again">Again</string>
+    <string name="change">Change</string>
+    <string name="find">Find</string>
+    <string name="save">Save</string>
+    <string name="exit">Exit</string>
+    <string name="delete">Delete</string>
+    <string name="user_info">User info</string>
+
+    <string name="wrong_password">Wrong password</string>
+    <string name="wrong_username">Wrong username</string>
+    <string name="not_same">Not same</string>
+    <string name="student_added">Student added</string>
+    <string name="age_must_be_number">Age must be number!</string>
+    <string name="no_student_found">No student found!</string>
+    <string name="same_username">Same username</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="invalid_password">"Password must contains\n" + " minimum 8, maximum 20 characters\n" + " one digit\n" + " upper case\n" + " lower case\n" + " special character and\n" + " doesn't contain any space."</string>
+    <string name="entered_information_cant_be_empty">Entered information can\'t be empty!</string>
+    <string name="minimum_5_characters">Username must have minimum 5 characters</string>
+
+    <string name="add_student">Add Student</string>
+    <string name="remove_student">Remove Student</string>
+    <string name="edit_student">Edit Student</string>
+    <string name="find_students">Find Students</string>
+    <string name="show_all_students">Show All Students</string>
+    <string name="update_password">Update Password</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="accept_changes">Accept changes</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="check">Check</string>
+    <string name="todo">TODO</string>
+    <string name="type_here">Type here</string>
+    <string name="change_password">Change password</string>
+    <string name="enter_current_password">Enter current password</string>
+    <string name="s">S</string>
+    <string name="h">H</string>
+</resources>
