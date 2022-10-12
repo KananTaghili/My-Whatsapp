@@ -1,10 +1,12 @@
 package com.kanantaghili.mywhatsapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.auth.EmailAuthProvider
@@ -50,6 +52,12 @@ class ChangePasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         init()
         visibilitySwitch()
+
+        this.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 
     private fun visibilitySwitch() {
@@ -100,10 +108,5 @@ class ChangePasswordActivity : AppCompatActivity() {
                         }
                 }
         } else info.setText(R.string.not_same)
-    }
-
-    @Deprecated("Deprecated in Java", ReplaceWith("finish()"))
-    override fun onBackPressed() {
-        finish()
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,6 @@ import com.kanantaghili.mywhatsapp.R
 import com.kanantaghili.mywhatsapp.adapter.UserAdapter
 import com.kanantaghili.mywhatsapp.databinding.ActivityUsersBinding
 import com.kanantaghili.mywhatsapp.model.User
-
 
 class UsersActivity : AppCompatActivity() {
 
@@ -41,6 +41,15 @@ class UsersActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
         adapter = UserAdapter(postArrayList)
         binding.recyclerView.adapter = adapter
+
+        this.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@UsersActivity, LoginActivity::class.java)
+                startActivity(intent)
+                Firebase.auth.signOut()
+                finish()
+            }
+        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -51,6 +60,9 @@ class UsersActivity : AppCompatActivity() {
                 if (e != null) {
                     Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
                 }
+
+                postArrayList.clear()
+
                 if (snapshot != null) {
                     for (snap in snapshot.documents) {
                         val name = snap.get("name") as String
@@ -80,13 +92,5 @@ class UsersActivity : AppCompatActivity() {
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        Firebase.auth.signOut()
-        finish()
     }
 }

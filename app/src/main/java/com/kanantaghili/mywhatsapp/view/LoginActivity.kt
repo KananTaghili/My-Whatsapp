@@ -6,6 +6,7 @@ import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -38,6 +39,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         init()
         checkbox()
+
+        this.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+            }
+        })
     }
 
     private fun checkbox() {
@@ -79,12 +88,5 @@ class LoginActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
             }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

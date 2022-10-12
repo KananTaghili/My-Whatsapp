@@ -41,27 +41,27 @@ class MessageAdapter(private val message: ArrayList<Message>, private val userNa
         return message.size
     }
 
-    class MessageHolder(binding: View, viewType: Int) : RecyclerView.ViewHolder(binding) {
+    class MessageHolder(view: View, viewType: Int) : RecyclerView.ViewHolder(view) {
         var text: TextView
 
         init {
             text = if (viewType == 1) {
-                binding.findViewById(R.id.messageText1)
+                view.findViewById(R.id.messageText1)
             } else {
-                binding.findViewById(R.id.messageText2)
+                view.findViewById(R.id.messageText2)
             }
         }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MessageHolder {
-        val binding = if (viewType == 1) {
+        val view = if (viewType == 1) {
             LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.recycler_row_2, viewGroup, false)
         } else {
             LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.recycler_row_3, viewGroup, false)
         }
-        return MessageHolder(binding, viewType)
+        return MessageHolder(view, viewType)
     }
 
     override fun getItemViewType(position: Int): Int {
