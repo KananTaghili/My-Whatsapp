@@ -21,6 +21,12 @@ class MessageAdapter(private val message: ArrayList<Message>, private val userNa
     override fun onBindViewHolder(viewHolder: MessageHolder, position: Int) {
         viewHolder.text.text = message[position].text.toString()
 
+        viewHolder.itemView.setOnClickListener(
+            View.OnClickListener {
+                println("salam4 $position")
+            }
+        )
+
         viewHolder.itemView.setOnLongClickListener {
             val clipboard: ClipboardManager =
                 viewHolder.itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

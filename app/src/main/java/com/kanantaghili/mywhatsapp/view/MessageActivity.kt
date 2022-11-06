@@ -10,9 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -22,15 +20,20 @@ import com.kanantaghili.mywhatsapp.model.Message
 import com.kanantaghili.mywhatsapp.model.User
 import java.io.Serializable
 
+@Suppress("DEPRECATION", "UNCHECKED_CAST")
 class MessageActivity : AppCompatActivity() {
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private var firebaseAuth = Firebase.auth
+    private var firebaseFirestore = Firebase.firestore
     private lateinit var otherUser: User
-    private lateinit var message: EditText
     private lateinit var binding: ActivityMessageBinding
+    private lateinit var message: EditText
     private lateinit var uid: String
-    private var messageArrayList: ArrayList<Message> = ArrayList()
+    private lateinit var myLayoutManager: LinearLayoutManager
     private lateinit var adapter: MessageAdapter
+    private var messageArrayList = ArrayList<Message>()
+    private var scrollLastPosition = 0
+    private var scrollFirstPosition = 0
+    private var flag = true
 
     private fun init() {
         binding = ActivityMessageBinding.inflate(layoutInflater)
@@ -38,31 +41,64 @@ class MessageActivity : AppCompatActivity() {
         setContentView(view)
 
         message = binding.writeMessage
-        binding.messageRecycler.layoutManager = LinearLayoutManager(this)
 
-        firebaseAuth = Firebase.auth
-        firebaseFirestore = Firebase.firestore
+        binding.messageRecycler.layoutManager = LinearLayoutManager(this)
+        myLayoutManager = binding.messageRecycler.layoutManager as LinearLayoutManager
 
         uid = firebaseAuth.currentUser?.uid.toString()
         otherUser = intent.getSerializable("otherUser", User::class.java)
+
+        adapter = MessageAdapter(messageArrayList, firebaseAuth.currentUser?.email.toString())
+        binding.messageRecycler.adapter = adapter
+
+        supportActionBar?.title = otherUser.name
+        supportActionBar?.subtitle = otherUser.surname
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
-        supportActionBar?.title = otherUser.name
-        supportActionBar?.subtitle = otherUser.surname
 
         getMessage()
 
-        adapter = MessageAdapter(messageArrayList, firebaseAuth.currentUser?.email.toString())
-        binding.messageRecycler.adapter = adapter
-
         binding.sendImage.setOnClickListener {
             if (!TextUtils.isEmpty(message.text.toString().replace("\\s+".toRegex(), ""))) {
-                val message2: String = message.text.toString()
-                setMessage(message2)
+                val sendMessage = message.text.toString()
+                setMessage(sendMessage)
                 message.setText("")
+            }
+        }
+
+        if (flag) {
+            binding.writeMessage.setOnFocusChangeListener { _, _ ->
+                scrollLastPosition = myLayoutManager.findLastVisibleItemPosition()
+                layoutChanger()
+                flag = false
+            }
+        }
+
+        binding.writeMessage.setOnClickListener {
+            scrollLastPosition = myLayoutManager.findLastVisibleItemPosition()
+            scrollFirstPosition = myLayoutManager.findFirstVisibleItemPosition()
+        }
+    }
+
+    private fun layoutChanger() {
+        binding.messageRecycler.addOnLayoutChangeListener { _, _, _, _, bottom,
+                                                            _, _, _, oldBottom ->
+
+            if (scrollLastPosition == messageArrayList.size - 1 && bottom < oldBottom) {
+                binding.messageRecycler.smoothScrollToPosition(messageArrayList.size - 1)
+            } else if (scrollLastPosition < messageArrayList.size - 1 && bottom != oldBottom) {
+                if (bottom > oldBottom) {
+                    binding.messageRecycler.postDelayed({
+                        binding.messageRecycler.scrollToPosition(scrollFirstPosition)
+                    }, 0)
+                }
+                binding.messageRecycler.postDelayed({
+                    binding.messageRecycler.smoothScrollToPosition(scrollLastPosition)
+                }, 10)
+//                binding.messageRecycler.smoothScrollToPosition(scrollLastPosition)
             }
         }
     }
@@ -85,7 +121,6 @@ class MessageActivity : AppCompatActivity() {
                     for (snap in snapshot.documents) {
                         val message = snap.get("message") as String
                         val from = snap.get("from") as String
-
                         val messageModel = Message(message, from)
                         messageArrayList.add(messageModel)
                         adapter.notifyDataSetChanged()
@@ -133,4 +168,3 @@ class MessageActivity : AppCompatActivity() {
         }
     }
 }
-
